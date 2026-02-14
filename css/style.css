@@ -1,15 +1,144 @@
-p {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-
+:root {
+  /* Brutalist / clean palette */
+  --bg: #ffffff;
+  --panel: #fafafa;
+  --text: #0b0b0b;
+  --muted: #4a4a4a;
+  --accent: #000000;
+  --accent-2: #d62828;
 }
 
+/* Base and typography */
+* { box-sizing: border-box }
+html, body { height: 100% }
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.4;
+  padding: 28px 18px;
+}
+
+/* Brutalist headings */
 h1, h2, h3, h4, h5 {
-  font-family: "Lato", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
-  font-style: normal;
+  color: var(--accent);
+  margin: 0 0 8px 0;
 }
-ul {
-  list-style-type: none;
+
+/* Container and main layout */
+.site-container, main { max-width: 1180px; margin: 0 auto }
+header { padding: 18px 6px; margin-bottom: 10px }
+header h1 { font-size: 2rem; letter-spacing: 1px; text-transform: uppercase }
+header p { margin: 6px 0 0 0; color: var(--muted); font-weight: 500 }
+
+main { padding: 8px 0 40px 0 }
+
+/* Sections: keep left column occupied */
+main { display: block }
+section > header { margin: 18px 0 10px 0 }
+section h2 { font-size: 1.25rem; color: var(--muted); border: none }
+
+/* Menu list - minimal, stacked on mobile */
+ul[aria-label] { list-style: none; padding: 0; margin: 6px 0 28px 0 }
+li { margin: 8px 0 }
+
+article {
+  padding: 6px 0;
+  position: relative;
+  padding-bottom: 28px; /* space for divider + breathing room */
 }
+
+/* Divider placed slightly below content so price/unit appear above it */
+article::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e9e9e9;
+  bottom: 8px;
+  z-index: 1;
+}
+
+/* Title row: large, left-aligned; price aligned right */
+article h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 6px 0;
+}
+article p { margin: 0 0 6px 0; color: var(--muted); font-size: 0.95rem }
+
+/* Price layout: unit above amount to clarify pricing */
+.price { display: inline-flex; gap: 8px; align-items: baseline; margin-top: 6px; float: right }
+.price .unit { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin: 0 }
+.price .amount { font-weight: 800; color: var(--text); font-size: 1rem }
+
+/* Images - mobile: inline and visible */
+figure { margin: 8px 0 0 0 }
+figure img { width: 100%; height: auto; display: block; object-fit: cover; max-height: 220px }
+
+/* Desktop / large screens: two-column layout with left text, right preview */
+@media (min-width: 980px) {
+  body { padding: 40px 36px }
+  main { display: grid; grid-template-columns: 420px 1fr; gap: 36px; align-items: start }
+
+  /* Ensure sections and lists stay in left column */
+  main > section { grid-column: 1 }
+
+  /* Hide inline images in the flow; they'll be used as floating previews */
+  figure { margin: 0 }
+  figure img {
+    width: clamp(300px, 30vw, 520px);
+    height: auto;
+    position: fixed;
+    right: clamp(28px, 6vw, 80px);
+    top: 50%;
+    transform: translateY(-50%) translateX(20px) scale(0.98);
+    opacity: 0;
+    transition: opacity 220ms ease, transform 260ms cubic-bezier(.2,.9,.2,1);
+    z-index: 80;
+    pointer-events: none;
+    filter: none;
+    box-shadow: none;
+    border: 6px solid #fff;
+    background: #fff;
+  }
+
+  /* When hovering or focusing a menu item, show its image as the preview */
+  article:hover figure img, article:focus-within figure img {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  /* Remove borders and separators for a cleaner brutalist feel on large screens */
+  article { padding-right: 6px }
+  article h3 { font-size: 1.15rem }
+
+  /* Make titles feel aligned and crisp */
+  article h3 { display: block }
+  article p { color: var(--muted); margin-top: 6px }
+}
+
+/* Shrink previews and inline images on small screens for better viewing */
+@media (max-width: 640px) {
+  figure img { max-height: 160px }
+}
+@media (max-width: 420px) {
+  figure img { max-height: 120px }
+  body { padding: 18px 12px }
+}
+
+/* Accessibility: keyboard focus behavior */
+article:focus-within { outline: 3px solid rgba(0,0,0,0.06) }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+
+/* Utility */
+.sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
